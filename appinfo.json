@@ -7,23 +7,7 @@
     "longName": "Overlapping rectangles",
     "projectType": "native",
     "resources": {
-        "media": [
-            {
-                "file": "fonts/Raleway-Regular.ttf",
-                "name": "FONT_RALEWAY_REGULAR_36",
-                "type": "font"
-            },
-            {
-                "file": "fonts/OpenSans-Semibold.ttf",
-                "name": "FONT_OPEN_SANS_20",
-                "type": "font"
-            },
-            {
-                "file": "fonts/OpenSans-Semibold.ttf",
-                "name": "FONT_OPEN_SANS_36",
-                "type": "font"
-            }
-        ]
+        "media": []
     },
     "sdkVersion": "3",
     "shortName": "Overlap",

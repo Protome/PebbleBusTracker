@@ -58,8 +58,8 @@ static void main_window_load(Window *window) {
   layer_add_child(window_layer, text_layer_get_layer(s_time_layer));
   
   //Border rectangles creation
-  const int16_t  horizontalSize = bounds.size.w/6;
-  const int16_t  verticalSize = bounds.size.h/6;
+  int16_t  horizontalSize = bounds.size.w/6;
+  int16_t  verticalSize = bounds.size.h/6;
   
   s_top_layer = layer_create_with_data(GRect(0,0, bounds.size.w, verticalSize), sizeof(ColourData));
   ColourData *top_colour = (ColourData*)layer_get_data(s_top_layer);
