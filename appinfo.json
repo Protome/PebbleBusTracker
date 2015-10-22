@@ -1,0 +1,38 @@
+{
+    "appKeys": {},
+    "capabilities": [
+        ""
+    ],
+    "companyName": "Pebble",
+    "longName": "Overlapping rectangles",
+    "projectType": "native",
+    "resources": {
+        "media": [
+            {
+                "file": "fonts/Raleway-Regular.ttf",
+                "name": "FONT_RALEWAY_REGULAR_36",
+                "type": "font"
+            },
+            {
+                "file": "fonts/OpenSans-Semibold.ttf",
+                "name": "FONT_OPEN_SANS_20",
+                "type": "font"
+            },
+            {
+                "file": "fonts/OpenSans-Semibold.ttf",
+                "name": "FONT_OPEN_SANS_36",
+                "type": "font"
+            }
+        ]
+    },
+    "sdkVersion": "3",
+    "shortName": "Overlap",
+    "targetPlatforms": [
+        "basalt"
+    ],
+    "uuid": "02bf609e-b5ab-450e-a4d8-b1c120092b77",
+    "versionLabel": "1.0",
+    "watchapp": {
+        "watchface": true
+    }
+}
