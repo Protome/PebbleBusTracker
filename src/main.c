@@ -30,10 +30,10 @@ static void update_time() {
 }
 
 
-static void update_bar_proc(Layer *topLayer, GContext *ctx) {
-  GRect bounds = layer_get_bounds(topLayer);
+static void update_bar_proc(Layer *barLayer, GContext *ctx) {
+  GRect bounds = layer_get_bounds(barLayer);
   
-  ColourData *colour_ctx = (ColourData*)layer_get_data(topLayer);
+  ColourData *colour_ctx = (ColourData*)layer_get_data(barLayer);
   GColor8 background_colour = colour_ctx -> colour;
   graphics_context_set_fill_color(ctx, background_colour);
   graphics_fill_rect(ctx, bounds, 0, GCornerNone);
@@ -90,7 +90,6 @@ static void main_window_load(Window *window) {
 }
 
 static void main_window_unload(Window *window) {
-  fonts_unload_custom_font(s_time_font);
   text_layer_destroy(s_time_layer);
   
   layer_destroy(s_top_layer);
