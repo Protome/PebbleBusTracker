@@ -4,6 +4,7 @@
 #define BOTTOM_COLOUR GColorOrange
 #define LEFT_COLOUR GColorPurple
 #define RIGHT_COLOUR GColorRed
+#define DISCONNECTED_COLOUR GColorLightGray
 
 typedef struct {
   GColor8 colour;
@@ -14,6 +15,7 @@ static TextLayer *s_time_layer;
 static Layer *s_top_layer, *s_right_layer, *s_left_layer, *s_bottom_layer;
 
 static GFont s_time_font;
+static bool isConnected = false;
 
 static void update_time() {
   time_t temp = time(NULL); 
@@ -29,13 +31,26 @@ static void update_time() {
   text_layer_set_text(s_time_layer, buffer);
 }
 
+static void bluetooth_callback(bool connected) {
+  isConnected = connected;
+  vibes_double_pulse();
+
+  //Marking one layer as dirty seems to redraw all of them.
+  //That probably means I messed something up somewhere.
+  layer_mark_dirty(s_top_layer);
+}
 
 static void update_bar_proc(Layer *barLayer, GContext *ctx) {
   GRect bounds = layer_get_bounds(barLayer);
   
+  if (isConnected) {
   ColourData *colour_ctx = (ColourData*)layer_get_data(barLayer);
   GColor8 background_colour = colour_ctx -> colour;
   graphics_context_set_fill_color(ctx, background_colour);
+  }
+  else {
+    graphics_context_set_fill_color(ctx, DISCONNECTED_COLOUR);
+  }
   graphics_fill_rect(ctx, bounds, 0, GCornerNone);
 }
 
@@ -87,6 +102,7 @@ static void main_window_load(Window *window) {
   layer_add_child(window_layer, s_bottom_layer); 
   
   update_time();
+  bluetooth_callback(connection_service_peek_pebble_app_connection());
 }
 
 static void main_window_unload(Window *window) {
@@ -117,6 +133,11 @@ static void init() {
   
   // Register with TickTimerService
   tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
+  
+  //Register with bluetooth connection updates
+  connection_service_subscribe((ConnectionHandlers) {
+    .pebble_app_connection_handler = bluetooth_callback
+  });
 }
 
 static void deinit() {
