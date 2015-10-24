@@ -1,14 +1,29 @@
 #include <pebble.h>
 
 #define KEY_BACKGROUND_COLOUR 0
-#define TOP_COLOUR GColorCyan
-#define BOTTOM_COLOUR GColorOrange
-#define LEFT_COLOUR GColorPurple
-#define RIGHT_COLOUR GColorRed
+#define KEY_TEXT_COLOUR 1
+#define KEY_TOP_COLOUR 2
+#define KEY_LEFT_COLOUR 3
+#define KEY_RIGHT_COLOUR 4
+#define KEY_BOTTOM_COLOUR 5
+
+#define DEFAULT_BACKGROUND_COLOUR GColorBlack
+#define DEFAULT_TEXT_COLOUR GColorWhite
+#define DEFAULT_TOP_COLOUR GColorCyan
+#define DEFAULT_BOTTOM_COLOUR GColorOrange
+#define DEFAULT_LEFT_COLOUR GColorPurple
+#define DEFAULT_RIGHT_COLOUR GColorRed
 #define DISCONNECTED_COLOUR GColorLightGray
 
+typedef enum  {
+  TOP,
+  BOTTOM,
+  RIGHT,
+  LEFT  
+} BAR_POSITION;
+
 typedef struct {
-  GColor8 colour;
+  BAR_POSITION position;
 } ColourData;
 
 static Window *s_main_window;
@@ -16,6 +31,8 @@ static TextLayer *s_time_layer;
 static Layer *s_top_layer, *s_right_layer, *s_left_layer, *s_bottom_layer;
 
 static GColor8 background_colour;
+static GColor8 text_colour;
+
 static GFont s_time_font;
 static bool isConnected = false;
 
@@ -35,13 +52,48 @@ static void update_time() {
 
 static void inbox_received_handler(DictionaryIterator *iter, void *context) {
   Tuple *background_color_t = dict_find(iter, KEY_BACKGROUND_COLOUR);
-    
+  Tuple *top_color_t = dict_find(iter, KEY_TOP_COLOUR);
+  Tuple *bottom_color_t = dict_find(iter, KEY_BOTTOM_COLOUR);
+  Tuple *right_color_t = dict_find(iter, KEY_RIGHT_COLOUR);
+  Tuple *left_color_t = dict_find(iter, KEY_LEFT_COLOUR);
+  Tuple *text_colour_t = dict_find(iter, KEY_TEXT_COLOUR);
+  
   if (background_color_t) {
     int colour = background_color_t->value->int32;
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "background colour got!");
     persist_write_int(KEY_BACKGROUND_COLOUR, colour);
     background_colour = GColorFromHEX(colour);
     window_set_background_color(s_main_window, background_colour);
+  }
+  
+  if (top_color_t) {
+    int colour = top_color_t->value->int32;
+    persist_write_int(KEY_TOP_COLOUR, colour);
+    layer_mark_dirty(s_top_layer);
+  }
+  
+  if (bottom_color_t) {
+    int colour = bottom_color_t->value->int32;
+    persist_write_int(KEY_BOTTOM_COLOUR, colour);
+    layer_mark_dirty(s_bottom_layer);
+  }
+  
+  if (right_color_t) {
+    int colour = right_color_t->value->int32;
+    persist_write_int(KEY_RIGHT_COLOUR, colour);
+    layer_mark_dirty(s_right_layer);
+  }
+  
+  if (left_color_t) {
+    int colour = left_color_t->value->int32;
+    persist_write_int(KEY_LEFT_COLOUR, colour);
+    layer_mark_dirty(s_left_layer);
+  }
+  
+  if(text_colour_t) {
+    int colour = text_colour_t->value->int32;
+    persist_write_int(KEY_TEXT_COLOUR, colour);
+    text_colour = GColorFromHEX(colour);
+    text_layer_set_text_color(s_time_layer, text_colour);
   }
 }
 
@@ -54,13 +106,54 @@ static void bluetooth_callback(bool connected) {
   layer_mark_dirty(s_top_layer);
 }
 
+static GColor8 get_section_colour(BAR_POSITION position) {
+  switch(position) {
+    case TOP: 
+      if(persist_read_int(KEY_TOP_COLOUR)) {
+        int color_hex = persist_read_int(KEY_TOP_COLOUR);
+        return GColorFromHEX(color_hex);
+      }
+      else {
+        return DEFAULT_TOP_COLOUR;
+      }
+    case BOTTOM:
+      if(persist_read_int(KEY_BOTTOM_COLOUR)) {
+        int color_hex = persist_read_int(KEY_BOTTOM_COLOUR);
+        return GColorFromHEX(color_hex);
+      }
+      else {
+        return DEFAULT_BOTTOM_COLOUR;
+      }
+    case RIGHT:
+      if(persist_read_int(KEY_RIGHT_COLOUR)) {
+        int color_hex = persist_read_int(KEY_RIGHT_COLOUR);
+        return GColorFromHEX(color_hex);
+      }
+      else {
+        return DEFAULT_RIGHT_COLOUR;
+      }
+    case LEFT:
+      if(persist_read_int(KEY_LEFT_COLOUR)) {
+        int color_hex = persist_read_int(KEY_LEFT_COLOUR);
+        return GColorFromHEX(color_hex);
+      }
+      else {
+        return DEFAULT_LEFT_COLOUR;
+      }
+  }
+  
+  return DISCONNECTED_COLOUR;
+}
+
 static void update_bar_proc(Layer *barLayer, GContext *ctx) {
   GRect bounds = layer_get_bounds(barLayer);
   
   if (isConnected) {
   ColourData *colour_ctx = (ColourData*)layer_get_data(barLayer);
-  GColor8 background_colour = colour_ctx -> colour;
-  graphics_context_set_fill_color(ctx, background_colour);
+  BAR_POSITION barPosition = colour_ctx -> position;
+  GColor8 colour = get_section_colour(barPosition);
+    
+  graphics_context_set_fill_color(ctx, colour);
   }
   else {
     graphics_context_set_fill_color(ctx, DISCONNECTED_COLOUR);
@@ -84,7 +177,16 @@ static void main_window_load(Window *window) {
   //Time Text Creation
   s_time_layer = text_layer_create(GRect(0, 58, bounds.size.w, 50));
   text_layer_set_background_color(s_time_layer, GColorClear);
-  text_layer_set_text_color(s_time_layer, GColorWhite);
+  
+  if (persist_read_int(KEY_TEXT_COLOUR)) {
+    int color_hex = persist_read_int(KEY_TEXT_COLOUR);
+    text_colour = GColorFromHEX(color_hex);
+  }
+  else {
+    text_colour = GColorWhite;
+  }
+  
+  text_layer_set_text_color(s_time_layer, text_colour);
   text_layer_set_text(s_time_layer, "00:00");
   
   s_time_font = fonts_get_system_font(FONT_KEY_LECO_32_BOLD_NUMBERS);
@@ -99,23 +201,23 @@ static void main_window_load(Window *window) {
   int16_t  verticalSize = bounds.size.h/6;
   
   s_top_layer = layer_create_with_data(GRect(0,0, bounds.size.w, verticalSize), sizeof(ColourData));
-  ColourData *top_colour = (ColourData*)layer_get_data(s_top_layer);
-  top_colour ->colour = TOP_COLOUR;
+  ColourData *top_colour_data = (ColourData*)layer_get_data(s_top_layer);
+  top_colour_data -> position = TOP;
   layer_set_update_proc(s_top_layer, update_bar_proc);
     
   s_right_layer = layer_create_with_data(GRect(bounds.size.w - horizontalSize, 0, horizontalSize, bounds.size.h), sizeof(ColourData));
-  ColourData *right_colour = (ColourData*)layer_get_data(s_right_layer);
-  right_colour ->colour = RIGHT_COLOUR;
+  ColourData *right_colour_data = (ColourData*)layer_get_data(s_right_layer);
+  right_colour_data -> position = RIGHT;
   layer_set_update_proc(s_right_layer, update_bar_proc);
   
   s_left_layer = layer_create_with_data(GRect(0,0, horizontalSize, bounds.size.h), sizeof(ColourData));
   ColourData *left_colour = (ColourData*)layer_get_data(s_left_layer);
-  left_colour ->colour = LEFT_COLOUR;
+  left_colour -> position = LEFT;
   layer_set_update_proc(s_left_layer, update_bar_proc);
   
   s_bottom_layer = layer_create_with_data(GRect(horizontalSize, bounds.size.h - verticalSize, bounds.size.w - horizontalSize, verticalSize), sizeof(ColourData));
   ColourData *bottom_colour = (ColourData*)layer_get_data(s_bottom_layer);
-  bottom_colour ->colour = BOTTOM_COLOUR;
+  bottom_colour -> position = BOTTOM;
   layer_set_update_proc(s_bottom_layer, update_bar_proc);  
   
   layer_add_child(window_layer, s_left_layer);
