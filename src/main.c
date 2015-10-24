@@ -99,7 +99,9 @@ static void inbox_received_handler(DictionaryIterator *iter, void *context) {
 
 static void bluetooth_callback(bool connected) {
   isConnected = connected;
-  vibes_double_pulse();
+  if (isConnected == false) {
+    vibes_double_pulse();
+  }
 
   //Marking one layer as dirty seems to redraw all of them.
   //That probably means I messed something up somewhere.
