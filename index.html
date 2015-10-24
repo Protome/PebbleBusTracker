@@ -133,11 +133,12 @@
     return defaultValue || false;
  }
 
- var submitButton = document.getElementById('resetButton');
- submitButton.addEventListener('click', function() {
+ var resetButton = document.getElementById('resetButton');
+    resetButton.addEventListener('click', function() {
     // Set the return URL depending on the runtime environment
     var return_to = getQueryParam('return_to', 'pebblejs://close#');
-    document.location = return_to + encodeURIComponent(JSON.stringify(setDefaults()));
+    setDefaults()
+    document.location = return_to + encodeURIComponent(JSON.stringify(getConfigData()));
  });
 
  var submitButton = document.getElementById('submitButton');
