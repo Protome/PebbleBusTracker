@@ -73,12 +73,27 @@
   <script>
     function getConfigData() {
     var backgroundColorPicker = document.getElementById('backgroundColourPicker');
+    var textColourPicker = document.getElementById('textColourPicker');
+    var topColourPicker = document.getElementById('topColourPicker');
+    var leftColourPicker = document.getElementById('leftColourPicker');
+    var rightColourPicker = document.getElementById('rightColourPicker');
+    var bottomColourPicker = document.getElementById('bottomColourPicker');
  
     var options = {
-      'backgroundColor': backgroundColorPicker.value
+      'backgroundColor': backgroundColorPicker.value,
+      'textColor': textColourPicker.value,
+      'topColor': topColourPicker.value,
+      'leftColor': leftColourPicker.value,
+      'rightColor': rightColourPicker.value,
+      'bottomColor': bottomColourPicker.value
     };
     // Save for next launch
     localStorage['backgroundColor'] = options['backgroundColor'];
+    localStorage['textColor'] = options['textColor'];
+    localStorage['topColor'] = options['topColor'];
+    localStorage['leftColor'] = options['leftColor'];
+    localStorage['rightColor'] = options['rightColor'];
+    localStorage['bottomColor'] = options['bottomColor'];
     console.log('Got options: ' + JSON.stringify(options));
     return options;
  }
@@ -105,8 +120,19 @@
 	
 (function() {
 	var backgroundColorPicker = document.getElementById('backgroundColourPicker');
+  var textColourPicker = document.getElementById('textColourPicker');
+  var topColourPicker = document.getElementById('topColourPicker');
+  var leftColourPicker = document.getElementById('leftColourPicker');
+  var rightColourPicker = document.getElementById('rightColourPicker');
+  var bottomColourPicker = document.getElementById('bottomColourPicker');
+
 	if(localStorage['backgroundColor']) {
 		backgroundColorPicker.value = localStorage['backgroundColor'];
+    textColourPicker.value = localStorage['textColor'];
+    topColourPicker.value = localStorage['topColor'];
+    leftColourPicker.value = localStorage['leftColor'];
+    rightColourPicker.value = localStorage['rightColor'];
+    bottomColourPicker.value = localStorage['bottomColor'];
 	}
 })();
     </script>
