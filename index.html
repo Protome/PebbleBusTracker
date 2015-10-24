@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <title>Rectangle Border Configuration</title>
+  <link rel='stylesheet' type='text/css' href='css/slate.min.css'>
+  <script src='js/slate.min.js'></script>
+  <style>
+  .title {
+    padding: 15px 10px;
+    text-transform: uppercase;
+    font-family: 'PT Sans', sans-serif;
+    font-size: 1.2em;
+    font-weight: 500;
+    color: #888888;
+    text-align: center;
+  }
+  </style>
+  </head>
+
+  <body>
+    <h1 class='title'>Rectangle Border Configuration</h1>
+
+    <div class='item-container'>
+      <div class='item-container-content'>
+        <div class='item'>
+          I made this watchface to learn, so if you have any suggestions for improvements send me a tweet!
+          <br>
+          <a href="https://twitter.com/intent/tweet?screen_name=Protome" class="twitter-mention-button" data-size="large" data-related="Protome">Tweet to @Protome</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        </div>
+      </div>
+    </div>
+
+    <div class='item-container'>
+      <div class='item-container-header'>Colours</div>
+      <div class='item-container-content'>
+        <label class='item'>
+          Background Color
+          <input id='backgroundColourPicker' type='text' class='item-color item-color-sunny' value='#000000'>
+        </label>
+        <label class='item'>
+          Text Color
+          <input id='textColourPicker' type='text' class='item-color item-color-sunny' value='#000000'>
+        </label>
+        <label class='item'>
+          Top Bar Color
+          <input id='topColourPicker' type='text' class='item-color item-color-sunny' value='#000000'>
+        </label>
+        <label class='item'>
+          Left Bar Color
+          <input id='leftColourPicker' type='text' class='item-color item-color-sunny' value='#000000'>
+        </label>
+        <label class='item'>
+          Right Bar Color
+          <input id='rightColourPicker' type='text' class='item-color item-color-sunny' value='#000000'>
+        </label>
+        <label class='item'>
+          Bottom Bar Color
+          <input id='bottomColourPicker' type='text' class='item-color item-color-sunny' value='#000000'>
+        </label>
+      </div>
+      <div class='item-container-footer'>
+        Choose the colours for each rectangle which forms the border. Or make them the same if you want, I'm not your boss.
+      </div>
+    </div>
+
+    <div class='item-container'>
+      <div class='button-container'>
+        <input id='submitButton' type='button' class='item-button' value='SUBMIT'>
+      </div>
+    </div>
+  </body>
+  <script>
+    function getConfigData() {
+    var backgroundColorPicker = document.getElementById('backgroundColourPicker');
+ 
+    var options = {
+      'backgroundColor': backgroundColorPicker.value
+    };
+    // Save for next launch
+    localStorage['backgroundColor'] = options['backgroundColor'];
+    console.log('Got options: ' + JSON.stringify(options));
+    return options;
+ }
+  
+ function getQueryParam(variable, defaultValue) {
+    var query = location.search.substring(1);
+    var vars = query.split('&');
+    for (var i = 0; i < vars.length; i++) {
+      var pair = vars[i].split('=');
+      if (pair[0] === variable) {
+        return decodeURIComponent(pair[1]);
+      }
+    }
+    return defaultValue || false;
+ }
+
+ var submitButton = document.getElementById('submitButton');
+ submitButton.addEventListener('click', function() {
+    console.log('Submit');
+    // Set the return URL depending on the runtime environment
+    var return_to = getQueryParam('return_to', 'pebblejs://close#');
+    document.location = return_to + encodeURIComponent(JSON.stringify(getConfigData()));
+ });
+	
+(function() {
+	var backgroundColorPicker = document.getElementById('backgroundColourPicker');
+	if(localStorage['backgroundColor']) {
+		backgroundColorPicker.value = localStorage['backgroundColor'];
+	}
+})();
+    </script>
+</html>
