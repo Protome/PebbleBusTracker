@@ -36,27 +36,27 @@
       <div class='item-container-content'>
         <label class='item'>
           Background Color
-          <input id='backgroundColourPicker' type='text' class='item-color item-color-sunny' value='#000000'>
+          <input id='backgroundColourPicker' type='text' class='item-color item-color-sunny' value='0x000000'>
         </label>
         <label class='item'>
           Text Color
-          <input id='textColourPicker' type='text' class='item-color item-color-sunny' value='#FFFFFF'>
+          <input id='textColourPicker' type='text' class='item-color item-color-sunny' value='0xFFFFFF'>
         </label>
         <label class='item'>
           Top Bar Color
-          <input id='topColourPicker' type='text' class='item-color item-color-sunny' value='#84F5F1'>
+          <input id='topColourPicker' type='text' class='item-color item-color-sunny' value='0x84F5F1'>
         </label>
         <label class='item'>
           Left Bar Color
-          <input id='leftColourPicker' type='text' class='item-color item-color-sunny' value='#955694'>
+          <input id='leftColourPicker' type='text' class='item-color item-color-sunny' value='0x955694'>
         </label>
         <label class='item'>
           Right Bar Color
-          <input id='rightColourPicker' type='text' class='item-color item-color-sunny' value='#E35462'>
+          <input id='rightColourPicker' type='text' class='item-color item-color-sunny' value='0xE35462'>
         </label>
         <label class='item'>
           Bottom Bar Color
-          <input id='bottomColourPicker' type='text' class='item-color item-color-sunny' value='#E66E6B'>
+          <input id='bottomColourPicker' type='text' class='item-color item-color-sunny' value='0xE66E6B'>
         </label>
       </div>
       <div class='item-container-footer'>
@@ -111,12 +111,12 @@
     var rightColourPicker = document.getElementById('rightColourPicker');
     var bottomColourPicker = document.getElementById('bottomColourPicker');
      
-    backgroundColorPicker.value = '#000000';
-    textColourPicker.value = '#FFFFFF';
-    topColourPicker.value = '#84F5F1';
-    leftColourPicker.value = '#955694';
-    rightColourPicker.value = '#E35462';
-    bottomColourPicker.value = '#E66E6B';
+    backgroundColorPicker.value = '0x000000';
+    textColourPicker.value = '0xFFFFFF';
+    topColourPicker.value = '0x84F5F1';
+    leftColourPicker.value = '0x955694';
+    rightColourPicker.value = '0xE35462';
+    bottomColourPicker.value = '0xE66E6B';
     
     getConfigData();
  }
