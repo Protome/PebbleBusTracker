@@ -1,5 +1,6 @@
 #include <pebble.h>
 
+#define KEY_BACKGROUND_COLOUR 0
 #define TOP_COLOUR GColorCyan
 #define BOTTOM_COLOUR GColorOrange
 #define LEFT_COLOUR GColorPurple
@@ -14,6 +15,7 @@ static Window *s_main_window;
 static TextLayer *s_time_layer;
 static Layer *s_top_layer, *s_right_layer, *s_left_layer, *s_bottom_layer;
 
+static GColor8 background_colour;
 static GFont s_time_font;
 static bool isConnected = false;
 
@@ -29,6 +31,18 @@ static void update_time() {
   }
 
   text_layer_set_text(s_time_layer, buffer);
+}
+
+static void inbox_received_handler(DictionaryIterator *iter, void *context) {
+  Tuple *background_color_t = dict_find(iter, KEY_BACKGROUND_COLOUR);
+    
+  if (background_color_t) {
+    int colour = background_color_t->value->int32;
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "background colour got!");
+    persist_write_int(KEY_BACKGROUND_COLOUR, colour);
+    background_colour = GColorFromHEX(colour);
+    window_set_background_color(s_main_window, background_colour);
+  }
 }
 
 static void bluetooth_callback(bool connected) {
@@ -57,7 +71,15 @@ static void update_bar_proc(Layer *barLayer, GContext *ctx) {
 static void main_window_load(Window *window) {
   Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
-  window_set_background_color(window, GColorBlack);
+  
+  if (persist_read_int(KEY_BACKGROUND_COLOUR)) {
+   int color_hex = persist_read_int(KEY_BACKGROUND_COLOUR);
+    background_colour = GColorFromHEX(color_hex);
+  }
+  else {
+    background_colour = GColorBlack;
+  }
+  window_set_background_color(window, background_colour);
   
   //Time Text Creation
   s_time_layer = text_layer_create(GRect(0, 58, bounds.size.w, 50));
@@ -133,6 +155,10 @@ static void init() {
   
   // Register with TickTimerService
   tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
+  
+  //Register with app messages
+  app_message_register_inbox_received(inbox_received_handler);
+  app_message_open(app_message_inbox_size_maximum(), app_message_outbox_size_maximum());
   
   //Register with bluetooth connection updates
   connection_service_subscribe((ConnectionHandlers) {
