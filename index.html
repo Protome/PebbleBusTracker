@@ -68,6 +68,8 @@
       <div class='button-container'>
         <input id='resetButton' type='button' class='item-button' value='RESET TO DEFAULTS'>
       </div>
+   </div>
+   <div class='item-container'>
       <div class='button-container'>
         <input id='submitButton' type='button' class='item-button' value='SUBMIT'>
       </div>
@@ -101,24 +103,22 @@
     return options;
  }
  
- function setDefaults() { 
-    var options = {
-      'backgroundColor': '#000000',
-      'textColor': '#FFFFFF',
-      'topColor': '#84F5F1',
-      'leftColor': '#955694',
-      'rightColor': '#E35462',
-      'bottomColor': '#E66E6B'
-    };
-    // Save for next launch
-    localStorage['backgroundColor'] = options['backgroundColor'];
-    localStorage['textColor'] = options['textColor'];
-    localStorage['topColor'] = options['topColor'];
-    localStorage['leftColor'] = options['leftColor'];
-    localStorage['rightColor'] = options['rightColor'];
-    localStorage['bottomColor'] = options['bottomColor'];
-    console.log('Got options: ' + JSON.stringify(options));
-    return options;
+ function setDefaults() {
+    var backgroundColorPicker = document.getElementById('backgroundColourPicker');
+    var textColourPicker = document.getElementById('textColourPicker');
+    var topColourPicker = document.getElementById('topColourPicker');
+    var leftColourPicker = document.getElementById('leftColourPicker');
+    var rightColourPicker = document.getElementById('rightColourPicker');
+    var bottomColourPicker = document.getElementById('bottomColourPicker');
+     
+    backgroundColorPicker.value = '#000000';
+    textColourPicker.value = '#FFFFFF';
+    topColourPicker.value = '#84F5F1';
+    leftColourPicker.value = '#955694';
+    rightColourPicker.value = '#E35462';
+    bottomColourPicker.value = '#E66E6B';
+    
+    getConfigData();
  }
   
  function getQueryParam(variable, defaultValue) {
