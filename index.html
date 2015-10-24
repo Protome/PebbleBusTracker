@@ -66,6 +66,9 @@
 
     <div class='item-container'>
       <div class='button-container'>
+        <input id='resetButton' type='button' class='item-button' value='RESET TO DEFAULTS'>
+      </div>
+      <div class='button-container'>
         <input id='submitButton' type='button' class='item-button' value='SUBMIT'>
       </div>
     </div>
@@ -97,6 +100,26 @@
     console.log('Got options: ' + JSON.stringify(options));
     return options;
  }
+ 
+ function setDefaults() { 
+    var options = {
+      'backgroundColor': '#000000',
+      'textColor': '#FFFFFF',
+      'topColor': '#84F5F1',
+      'leftColor': '#955694',
+      'rightColor': '#E35462',
+      'bottomColor': '#E66E6B'
+    };
+    // Save for next launch
+    localStorage['backgroundColor'] = options['backgroundColor'];
+    localStorage['textColor'] = options['textColor'];
+    localStorage['topColor'] = options['topColor'];
+    localStorage['leftColor'] = options['leftColor'];
+    localStorage['rightColor'] = options['rightColor'];
+    localStorage['bottomColor'] = options['bottomColor'];
+    console.log('Got options: ' + JSON.stringify(options));
+    return options;
+ }
   
  function getQueryParam(variable, defaultValue) {
     var query = location.search.substring(1);
@@ -109,6 +132,13 @@
     }
     return defaultValue || false;
  }
+
+ var submitButton = document.getElementById('resetButton');
+ submitButton.addEventListener('click', function() {
+    // Set the return URL depending on the runtime environment
+    var return_to = getQueryParam('return_to', 'pebblejs://close#');
+    document.location = return_to + encodeURIComponent(JSON.stringify(setDefaults()));
+ });
 
  var submitButton = document.getElementById('submitButton');
  submitButton.addEventListener('click', function() {
