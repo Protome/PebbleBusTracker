@@ -34,6 +34,7 @@ static Layer *s_top_layer, *s_right_layer, *s_left_layer, *s_bottom_layer;
 static GColor8 background_colour;
 static GColor8 text_colour;
 
+
 static GFont s_time_font;
 static bool isConnected = true;
 
@@ -69,30 +70,46 @@ static void inbox_received_handler(DictionaryIterator *iter, void *context) {
   
   if (top_color_t) {
     int colour = top_color_t->value->int32;
+    //Hacky fix but persist memory stores int values as 0 by default. So when the code is 0 (black) the value gets ignored when reading later.
+    if (colour == 0) {
+      colour = 1;
+    }
     persist_write_int(KEY_TOP_COLOUR, colour);
     layer_mark_dirty(s_top_layer);
   }
   
   if (bottom_color_t) {
     int colour = bottom_color_t->value->int32;
+    if (colour == 0) {
+      colour = 1;
+    }
     persist_write_int(KEY_BOTTOM_COLOUR, colour);
     layer_mark_dirty(s_bottom_layer);
   }
   
   if (right_color_t) {
     int colour = right_color_t->value->int32;
+    if (colour == 0) {
+      colour = 1;
+    }
     persist_write_int(KEY_RIGHT_COLOUR, colour);
     layer_mark_dirty(s_right_layer);
   }
   
   if (left_color_t) {
     int colour = left_color_t->value->int32;
+    if (colour == 0) {
+      colour = 1;
+    }
     persist_write_int(KEY_LEFT_COLOUR, colour);
     layer_mark_dirty(s_left_layer);
   }
   
   if(text_colour_t) {
     int colour = text_colour_t->value->int32;
+    if (colour == 0) {
+      colour = 1;
+    }
     persist_write_int(KEY_TEXT_COLOUR, colour);
     text_colour = GColorFromHEX(colour);
     text_layer_set_text_color(s_time_layer, text_colour);
@@ -126,9 +143,11 @@ static GColor8 get_section_colour(BAR_POSITION position) {
     case TOP: 
       if(persist_read_int(KEY_TOP_COLOUR)) {
         int color_hex = persist_read_int(KEY_TOP_COLOUR);
+        APP_LOG(APP_LOG_LEVEL_DEBUG, "The top colour is: %i", color_hex);
         return GColorFromHEX(color_hex);
       }
       else {
+        APP_LOG(APP_LOG_LEVEL_DEBUG, "Using default colour");
         return DEFAULT_TOP_COLOUR;
       }
     case BOTTOM:
