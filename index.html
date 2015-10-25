@@ -35,11 +35,11 @@
       <div class='item-container-header'>Colours</div>
       <div class='item-container-content'>
         <label class='item'>
-          Background Color
+          Background Colour
           <input id='backgroundColourPicker' type='text' class='item-color item-color-sunny' value='0x000000'>
         </label>
         <label class='item'>
-          Text Color
+          Text Colour
           <input id='textColourPicker' type='text' class='item-color item-color-sunny' value='0xFFFFFF'>
         </label>
         <label class='item'>
@@ -47,20 +47,33 @@
           <input id='topColourPicker' type='text' class='item-color item-color-sunny' value='0x00FFFF'>
         </label>
         <label class='item'>
-          Left Bar Color
+          Left Bar Colour
           <input id='leftColourPicker' type='text' class='item-color item-color-sunny' value='0xAA00AA'>
         </label>
         <label class='item'>
-          Right Bar Color
+          Right Bar Colour
           <input id='rightColourPicker' type='text' class='item-color item-color-sunny' value='0xFF0000'>
         </label>
         <label class='item'>
-          Bottom Bar Color
+          Bottom Bar Colour
           <input id='bottomColourPicker' type='text' class='item-color item-color-sunny' value='0xFF5500'>
         </label>
       </div>
       <div class='item-container-footer'>
         Choose the colours for each rectangle which forms the border. Or make them the same if you want, I'm not your boss.
+      </div>
+    </div>
+    
+    <div class='item-container'>
+      <div class='item-container-header'>Alerts</div>
+      <div class='item-container-content'>
+        <label class='item'>
+          Disconnection Alert
+          <input id='disconnectCheckbox' type='checkbox' class='item-toggle'>
+        </label>
+      </div>
+      <div class='item-container-footer'>
+        If this is activated, the watchface will turn grey when disconnected and back to colours when reconnected. It'll also vibrate when the connection changes.
       </div>
     </div>
 
@@ -83,6 +96,7 @@
     var leftColourPicker = document.getElementById('leftColourPicker');
     var rightColourPicker = document.getElementById('rightColourPicker');
     var bottomColourPicker = document.getElementById('bottomColourPicker');
+    var disconnectCheckbox = document.getElementById('disconnectCheckbox');
  
     var options = {
       'backgroundColor': backgroundColorPicker.value,
@@ -90,7 +104,8 @@
       'topColor': topColourPicker.value,
       'leftColor': leftColourPicker.value,
       'rightColor': rightColourPicker.value,
-      'bottomColor': bottomColourPicker.value
+      'bottomColor': bottomColourPicker.value,
+      'disconnectAlert': disconnectCheckbox.checked
     };
     // Save for next launch
     localStorage['backgroundColor'] = options['backgroundColor'];
@@ -99,6 +114,7 @@
     localStorage['leftColor'] = options['leftColor'];
     localStorage['rightColor'] = options['rightColor'];
     localStorage['bottomColor'] = options['bottomColor'];
+    localStorage['disconnectAlert'] = options['disconnectAlert'];
     console.log('Got options: ' + JSON.stringify(options));
     return options;
  }
@@ -156,6 +172,7 @@
   var leftColourPicker = document.getElementById('leftColourPicker');
   var rightColourPicker = document.getElementById('rightColourPicker');
   var bottomColourPicker = document.getElementById('bottomColourPicker');
+  var disconnectCheckbox = document.getElementById('disconnectCheckbox');
 
 	if(localStorage['backgroundColor']) {
 		backgroundColorPicker.value = localStorage['backgroundColor'];
@@ -164,6 +181,7 @@
     leftColourPicker.value = localStorage['leftColor'];
     rightColourPicker.value = localStorage['rightColor'];
     bottomColourPicker.value = localStorage['bottomColor'];
+    disconnectCheckbox.checked = JSON.parse(localStorage['disconnectAlert']);
 	}
 })();
     </script>
