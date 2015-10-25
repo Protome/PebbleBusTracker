@@ -19,6 +19,7 @@ Pebble.addEventListener('webviewclosed', function(e){
   dict.KEY_LEFT_COLOUR = parseInt(configData.leftColor, 16);
   dict.KEY_RIGHT_COLOUR = parseInt(configData.rightColor, 16);
   dict.KEY_BOTTOM_COLOUR = parseInt(configData.bottomColor, 16);
+  dict.KEY_DISCONNECT_ALERT = configData.disconnectAlert;
 
     Pebble.sendAppMessage( dict,
       function() {

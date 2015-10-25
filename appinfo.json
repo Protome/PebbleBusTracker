@@ -2,6 +2,7 @@
     "appKeys": {
         "KEY_BACKGROUND_COLOUR": 0,
         "KEY_BOTTOM_COLOUR": 5,
+        "KEY_DISCONNECT_ALERT": 6,
         "KEY_LEFT_COLOUR": 3,
         "KEY_RIGHT_COLOUR": 4,
         "KEY_TEXT_COLOUR": 1,
@@ -22,7 +23,7 @@
         "basalt"
     ],
     "uuid": "f59841bf-c795-44db-8628-38713e4ec5bb",
-    "versionLabel": "1.0",
+    "versionLabel": "1.1",
     "watchapp": {
         "watchface": true
     }

@@ -6,6 +6,7 @@
 #define KEY_LEFT_COLOUR 3
 #define KEY_RIGHT_COLOUR 4
 #define KEY_BOTTOM_COLOUR 5
+#define KEY_DISCONNECT_ALERT 6
 
 #define DEFAULT_BACKGROUND_COLOUR GColorBlack
 #define DEFAULT_TEXT_COLOUR GColorWhite
@@ -57,6 +58,7 @@ static void inbox_received_handler(DictionaryIterator *iter, void *context) {
   Tuple *right_color_t = dict_find(iter, KEY_RIGHT_COLOUR);
   Tuple *left_color_t = dict_find(iter, KEY_LEFT_COLOUR);
   Tuple *text_colour_t = dict_find(iter, KEY_TEXT_COLOUR);
+  Tuple *disconnect_alert_t = dict_find(iter, KEY_DISCONNECT_ALERT);
   
   if (background_color_t) {
     int colour = background_color_t->value->int32;
@@ -95,10 +97,19 @@ static void inbox_received_handler(DictionaryIterator *iter, void *context) {
     text_colour = GColorFromHEX(colour);
     text_layer_set_text_color(s_time_layer, text_colour);
   }
+  
+  if (disconnect_alert_t) {
+    if (disconnect_alert_t->value->int32 > 0) {
+      persist_write_bool(KEY_DISCONNECT_ALERT, true);
+    }
+    else {
+      persist_write_bool(KEY_DISCONNECT_ALERT, false);
+    }
+  }
 }
 
 static void bluetooth_callback(bool connected) {
-  
+  if (persist_read_bool(KEY_DISCONNECT_ALERT)) {
   if (isConnected != connected) {
     isConnected = connected;
     vibes_double_pulse();
@@ -107,6 +118,7 @@ static void bluetooth_callback(bool connected) {
   //Marking one layer as dirty seems to redraw all of them.
   //That probably means I messed something up somewhere.
   layer_mark_dirty(s_top_layer);
+  }
 }
 
 static GColor8 get_section_colour(BAR_POSITION position) {
