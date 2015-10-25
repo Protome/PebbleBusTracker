@@ -11,13 +11,13 @@
         "configurable"
     ],
     "companyName": "Protome",
-    "longName": "Square Frame Watchface",
+    "longName": "Simple Rectangles",
     "projectType": "native",
     "resources": {
         "media": []
     },
     "sdkVersion": "3",
-    "shortName": "Square Frame",
+    "shortName": "Simple Rectangles",
     "targetPlatforms": [
         "basalt"
     ],

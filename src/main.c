@@ -34,7 +34,7 @@ static GColor8 background_colour;
 static GColor8 text_colour;
 
 static GFont s_time_font;
-static bool isConnected = false;
+static bool isConnected = true;
 
 static void update_time() {
   time_t temp = time(NULL); 
@@ -98,8 +98,9 @@ static void inbox_received_handler(DictionaryIterator *iter, void *context) {
 }
 
 static void bluetooth_callback(bool connected) {
-  isConnected = connected;
-  if (isConnected == false) {
+  
+  if (isConnected != connected) {
+    isConnected = connected;
     vibes_double_pulse();
   }
 
