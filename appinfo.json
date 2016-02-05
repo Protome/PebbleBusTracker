@@ -1,30 +1,47 @@
 {
-    "appKeys": {
-        "KEY_BACKGROUND_COLOUR": 0,
-        "KEY_BOTTOM_COLOUR": 5,
-        "KEY_DISCONNECT_ALERT": 6,
-        "KEY_LEFT_COLOUR": 3,
-        "KEY_RIGHT_COLOUR": 4,
-        "KEY_TEXT_COLOUR": 1,
-        "KEY_TOP_COLOUR": 2
-    },
+    "appKeys": {},
     "capabilities": [
-        "configurable"
+        "location"
     ],
-    "companyName": "Protome",
-    "longName": "Simple Rectangles",
-    "projectType": "native",
+    "companyName": "kieran.bamford@gmail.com",
+    "longName": "BusTrackerTest",
+    "projectType": "pebblejs",
     "resources": {
-        "media": []
+        "media": [
+            {
+                "file": "images/menu_icon.png",
+                "menuIcon": true,
+                "name": "IMAGE_MENU_ICON",
+                "type": "bitmap"
+            },
+            {
+                "file": "images/logo_splash.png",
+                "name": "IMAGE_LOGO_SPLASH",
+                "type": "bitmap"
+            },
+            {
+                "file": "images/tile_splash.png",
+                "name": "IMAGE_TILE_SPLASH",
+                "type": "bitmap"
+            },
+            {
+                "file": "fonts/UbuntuMono-Regular.ttf",
+                "name": "MONO_FONT_14",
+                "type": "font"
+            }
+        ]
     },
     "sdkVersion": "3",
-    "shortName": "Simple Rectangles",
+    "shortName": "BusTrackerTest",
     "targetPlatforms": [
+        "aplite",
         "basalt"
     ],
-    "uuid": "f59841bf-c795-44db-8628-38713e4ec5bb",
-    "versionLabel": "1.11",
+    "uuid": "46c4db72-639d-44d1-a684-e3fc047e1d3c",
+    "versionCode": 1,
+    "versionLabel": "1.0",
     "watchapp": {
-        "watchface": true
+        "hiddenApp": false,
+        "watchface": false
     }
 }
